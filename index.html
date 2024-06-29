@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>拖曳文字檔案顯示內容</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #drop_zone {
+            border: 2px dashed #bbb;
+            border-radius: 5px;
+            width: 80%;
+            color: #bbb;
+            padding: 50px;
+            margin: 20px auto;
+        }
+        #file_content {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>拖曳文字檔案到此處</h1>
+    <div id="drop_zone">將檔案拖曳到此處</div>
+    <div id="file_content"></div>
+    <script>
+        const dropZone = document.getElementById('drop_zone');
+        const fileContent = document.getElementById('file_content');
+
+        dropZone.addEventListener('dragover', (event) => {
+            event.preventDefault();
+            dropZone.style.borderColor = '#333';
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.style.borderColor = '#bbb';
+        });
+
+        dropZone.addEventListener('drop', (event) => {
+            event.preventDefault();
+            dropZone.style.borderColor = '#bbb';
+
+            const files = event.dataTransfer.files;
+            if (files.length > 0) {
+                const file = files[0];
+                if (file.type === "text/plain") {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        fileContent.textContent = e.target.result;
+                    };
+                    reader.readAsText(file);
+                } else {
+                    alert("請拖曳文字檔 (.txt)!");
+                }
+            }
+        });
+    </script>
+</body>
+</html>
