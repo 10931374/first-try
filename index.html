@@ -3,20 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>拖曳文字檔案顯示內容</title>
+    <title>拖曳及點擊輸入文字檔案顯示內容</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             margin-top: 50px;
         }
-        #drop_zone {
+        #container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .section {
             border: 2px dashed #bbb;
             border-radius: 5px;
-            width: 80%;
+            width: 40%;
             color: #bbb;
             padding: 50px;
-            margin: 20px auto;
+            margin: 20px;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #left_section {
+            border-right: none;
+        }
+        #right_section {
+            border-left: none;
         }
         #file_content {
             width: 80%;
@@ -30,25 +45,35 @@
     </style>
 </head>
 <body>
-    <h1>拖曳文字檔案到此處</h1>
-    <div id="drop_zone">將檔案拖曳到此處</div>
+    <h1>左邊點擊輸入，右邊拖曳文字檔案</h1>
+    <div id="container">
+        <div id="left_section" class="section" contenteditable="true">點擊此處輸入或貼上文字</div>
+        <div id="right_section" class="section">將檔案拖曳到此處</div>
+    </div>
     <div id="file_content"></div>
     <script>
-        const dropZone = document.getElementById('drop_zone');
+        const leftSection = document.getElementById('left_section');
+        const rightSection = document.getElementById('right_section');
         const fileContent = document.getElementById('file_content');
 
-        dropZone.addEventListener('dragover', (event) => {
-            event.preventDefault();
-            dropZone.style.borderColor = '#333';
+        // 左邊區域點擊及輸入功能
+        leftSection.addEventListener('input', () => {
+            fileContent.textContent = leftSection.textContent;
         });
 
-        dropZone.addEventListener('dragleave', () => {
-            dropZone.style.borderColor = '#bbb';
+        // 右邊區域拖曳功能
+        rightSection.addEventListener('dragover', (event) => {
+            event.preventDefault();
+            rightSection.style.borderColor = '#333';
         });
 
-        dropZone.addEventListener('drop', (event) => {
+        rightSection.addEventListener('dragleave', () => {
+            rightSection.style.borderColor = '#bbb';
+        });
+
+        rightSection.addEventListener('drop', (event) => {
             event.preventDefault();
-            dropZone.style.borderColor = '#bbb';
+            rightSection.style.borderColor = '#bbb';
 
             const files = event.dataTransfer.files;
             if (files.length > 0) {
