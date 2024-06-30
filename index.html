@@ -14,19 +14,38 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            width: 100%;
+            border: 2px dashed #bbb;
+            border-radius: 5px;
+            padding: 20px;
+            box-sizing: border-box;
         }
         .section {
-            border: 2px dashed #bbb; 
-            border-radius: 5px;
-            width: 50%; 
-            color: #ccc;
-            padding: 50px;
-            margin: 0; 
+            width: 50%;
+            padding: 20px;
             min-height: 150px;
             display: flex;
             align-items: center;
             justify-content: center;
             box-sizing: border-box;
+            position: relative;
+        }
+        #left_section {
+            border-right: 2px dashed #bbb;
+        }
+        #right_section {
+            border-left: 2px dashed #bbb;
+        }
+        .placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #bbb;
         }
         #file_content {
             width: 80%;
@@ -42,7 +61,9 @@
 <body>
     <h1>左邊點擊輸入，右邊拖曳文字檔案</h1>
     <div id="container">
-        <div id="left_section" class="section" contenteditable="true">點擊此處輸入或貼上文字</div>
+        <div id="left_section" class="section" contenteditable="true">
+            <div class="placeholder">點擊此處輸入或貼上文字</div>
+        </div>
         <div id="right_section" class="section">將檔案拖曳到此處</div>
     </div>
     <div id="file_content"></div>
@@ -50,10 +71,20 @@
         const leftSection = document.getElementById('left_section');
         const rightSection = document.getElementById('right_section');
         const fileContent = document.getElementById('file_content');
+        const placeholder = leftSection.querySelector('.placeholder');
 
         // 左邊區域點擊及輸入功能
+        leftSection.addEventListener('focus', () => {
+            placeholder.style.display = 'none';
+        });
+
+        leftSection.addEventListener('blur', () => {
+            if (!leftSection.textContent.trim()) {
+                placeholder.style.display = 'flex';
+            }
+        });
+
         leftSection.addEventListener('input', () => {
-            <div id="left_section" class="section" contenteditable="true"> </div>
             fileContent.textContent = leftSection.textContent;
         });
 
